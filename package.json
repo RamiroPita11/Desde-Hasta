@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.21",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
+    "date-fns": "^4.4.0",
     "expo": "~57.0.26",
+    "expo-clipboard": "~57.0.2",
     "expo-constants": "~57.0.20",
     "expo-device": "~57.0.2",
     "expo-font": "~57.0.4",
@@ -13,6 +17,7 @@
     "expo-linking": "~57.0.11",
     "expo-router": "~57.0.24",
     "expo-splash-screen": "~57.0.9",
+    "expo-sqlite": "~57.0.3",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
@@ -28,16 +33,33 @@
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
+    "@types/jest": "29.5.14",
     "@types/react": "~19.2.2",
+    "esbuild": "^0.28.2",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~57.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "~29.7.0",
+    "jest-expo": "~57.0.5",
+    "prettier": "^3.9.9",
     "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "web": "npm run build:widget && expo start --web",
+    "build:web": "npm run build:widget && expo export -p web --clear",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:tz": "node scripts/test-timezones.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:link": "npx supabase@latest link",
+    "db:push": "npx supabase@latest db push",
+    "db:types": "npx supabase@latest gen types typescript --linked --schema public > src/types/database.ts",
+    "build:widget": "esbuild widget/src/widget.ts --bundle --format=esm --platform=neutral --main-fields=module,main --target=es2022 --legal-comments=none --outfile=public/widget.js",
+    "deploy": "npx vercel@latest deploy --prod"
   },
   "private": true
 }

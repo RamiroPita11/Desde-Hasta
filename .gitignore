@@ -41,3 +41,18 @@ example
 # generated native folders
 /ios
 /android
+
+# env (nunca commitear keys ni tokens)
+.env
+.env.*
+!.env.example
+
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
+
+# widget empaquetado (npm run build:widget)
+public/widget.js
+
+# Vercel
+.vercel
